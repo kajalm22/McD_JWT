@@ -9,12 +9,11 @@ const protect = ( async ( req , res , next)  => {
         try {
           
             token = req.headers.authorization.split(" ")[1] 
-            console.log(token)
+            console.log("TOKEN" ,token)
 
             const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY)
-            console.log(decoded)
+            // console.log(decoded)
             
-
             req.user = await User.findById(decoded.id).select("-password")  
             next()
 

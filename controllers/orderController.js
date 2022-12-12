@@ -61,4 +61,32 @@ const updateOrder = (async (req, res) => {
 })
 
 
-module.exports = { getOrders , createOrder , updateOrder}
+const deleteOrder = (async (req, res) => {
+  const order = await Order.findById(req.params.id)
+
+if (!order) {
+  res.status(400)
+
+  throw new Error("Order not found")
+}
+
+const user = await User.findById(req.user.id)
+
+if (!user) {
+  res.status(401)
+
+  throw new Error("User not found")
+}
+
+if (order.user.toString() != user.id) {
+  res.status(401)
+
+  throw new Error("User is not authorized")
+}
+
+const deletedOrder = await order.deleteOne()
+res.status(200).json({msg : "Order deleted successfully"})
+})
+
+
+module.exports = { getOrders , createOrder , updateOrder , deleteOrder}
