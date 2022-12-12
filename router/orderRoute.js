@@ -4,7 +4,7 @@ const {getOrders, createOrder,  updateOrder, deleteOrder} = require("../controll
 const {protect} = require("../middleware/authMiddleware")
 
 
-router.route("/get").get(protect, getOrders)
+router.route("/get").get( protect,getOrders)
 
 router.route("/placeOrder").post(protect, createOrder)
 

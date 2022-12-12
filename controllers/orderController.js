@@ -8,6 +8,9 @@ const getOrders = (async (req, res) => {
   res.status(200).json(orders)
 })
 
+
+
+
 const createOrder = (async (req, res) => {
   if (!req.body.order) {
     res.status(400)
@@ -27,7 +30,6 @@ const createOrder = (async (req, res) => {
 
 const updateOrder = (async (req, res) => {
   const order = await Order.findById(req.params.id)
-  // console.log("🚀 ~ file: orderController.js:57 ~ updateOrder ~ order", order)
   
   if (!order) {
     res.status(400)
@@ -35,7 +37,6 @@ const updateOrder = (async (req, res) => {
     throw new Error("Order not found")
   }
 
-  
 
   const user = await User.findById(req.user.id)
 
@@ -54,11 +55,9 @@ const updateOrder = (async (req, res) => {
   const updatedOrder = await Order.findByIdAndUpdate(req.params.id, req.body,{
     new: true,
   })
-    // console.log("🚀 ~ file: orderController.js:82 ~ updateOrder ~ updatedOrder", updatedOrder)
-    
-
   res.status(200).json(updatedOrder);
 })
+
 
 
 const deleteOrder = (async (req, res) => {
