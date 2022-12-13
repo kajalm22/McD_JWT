@@ -4,16 +4,16 @@ const nodemailer = require("nodemailer")
 let transporter = nodemailer.createTransport({
     host: process.env.EMAIL_HOST,
     port: process.env.EMAIL_PORT,
-    secure: false, // true for 465, false for other ports
+    secure: true, // true for 465, false for other ports
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS, 
-    },
+    }
   })
 
 
 
-
+  module.exports = transporter
 
 // let transporter = nodemailer.createTransport({
 //     service: 'gmail',
@@ -28,8 +28,6 @@ let transporter = nodemailer.createTransport({
 //     from: 'mishrakajalr22@gmail.com',
 //     to: 'mishrakajalr22@gmail.com',
 //     subject: 'Portfolio',
-//     // text: `First name: ${firstname}, \nLast name: ${lastname}, 
-//     // \nEmail: ${email}, \nMessage: ${msg}`
 // }
 
 // transporter.sendMail(mailOptions, (err, result) => {
@@ -44,4 +42,4 @@ let transporter = nodemailer.createTransport({
 
 
 
-  module.exports = transporter
+ 

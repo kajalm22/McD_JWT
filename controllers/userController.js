@@ -2,7 +2,7 @@ const jwt = require ("jsonwebtoken")
 const bcrypt = require ("bcrypt") 
 const User = require ("../models/userModel") 
 const nodemailer = require("nodemailer")
-const { transporter } = require("../config/emailConfig")
+const transporter = require("../config/emailConfig")
 
 
 const registerUSer = (async (req,res)=>{
@@ -107,7 +107,7 @@ const sendUserPasswordResetEmail = (async ( req , res) => {
                 subject: "McD password reset link",
                 html:`<a href=${link}>Click here </a> to reset your password`
             })
-            res.status(200).json({ msg : "Password reset email sent. Please check your email" , "info": info})
+            res.status(200).json({ msg : "Password reset email sent. Please check your email" })
 
         }else{
             res.status(500).json({ msg : "Email does not exist"})
@@ -121,35 +121,33 @@ const sendUserPasswordResetEmail = (async ( req , res) => {
 })
 
 const userPassword = ( async ( req , res) => {
-    const { password , password_confirmation } = req.body
+    const { password } = req.body
     const { id , token } = req.params
 
     const user = await User.findById(id)
     console.log(user)
     const newSecret = user._id + process.env.JWT_SECRET_KEY
-    console.log(newSecret)
+    // console.log(newSecret)
 
     try {
 
         jwt.verify(token , newSecret)
-        if(password && password_confirmation ){
+        if(!password ){
 
-            if (password !== password_confirmation){
-                res.status(500).json({ msg : "Password and new password does not match"})
+            
+                res.status(500).json({ msg : "Password is required"})
 
             }else{
                 const salt = await bcrypt.genSalt(10)
                 const hashedPassword = await bcrypt.hash(password, salt)
                 await User.findByIdAndUpdate(user._id, { $set: {password: hashedPassword}})
-                console.log(hashedPassword) 
+                // console.log(hashedPassword) 
             
             res.status(200).json({msg: "Password changed successfully"})
             }
-        }else{
-            res.status(500).json({ msg :"could not update your password"})
-        }
         
-    } catch (error) {
+        
+    }catch (error) {
         console.log(error)
         res.status(500).json({ msg : "Password is required"})
     }
